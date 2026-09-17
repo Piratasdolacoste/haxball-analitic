@@ -2,7 +2,14 @@ const path = require("path");
 const http = require("http");
 const express = require("express");
 const WebSocket = require("ws");
-const HaxballJS = require("haxball.js").default;
+const HaxballModule = require("haxball.js");
+
+const HaxballJS =
+  typeof HaxballModule === "function"
+    ? HaxballModule
+    : typeof HaxballModule.default === "function"
+      ? HaxballModule.default
+      : HaxballModule.HaxballJS;
 
 const PORT = Number(process.env.PORT || 10000);
 const TOKEN = process.env.HAXBALL_TOKEN;
@@ -241,11 +248,17 @@ server.listen(PORT, "0.0.0.0", async function () {
   try {
     console.log("Carregando HaxBall...");
 
-    const HBInit = await HaxballJS();
+    if (typeof HaxballJS !== "function") {
+  console.error("Não foi possível encontrar a função HaxballJS.");
+  console.error("Exportações encontradas:", Object.keys(HaxballModule));
+  process.exit(1);
+}
 
-    console.log("HaxBall carregado.");
+const HBInit = await HaxballJS();
 
-    await createRoom(HBInit);
+console.log("HaxBall carregado.");
+
+await createRoom(HBInit);
   } catch (error) {
     console.error("ERRO AO INICIAR HAXBALL:");
     console.error(error);
