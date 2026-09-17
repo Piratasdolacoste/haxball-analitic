@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "HaxBall Headless + dashboard analytics ao vivo",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
