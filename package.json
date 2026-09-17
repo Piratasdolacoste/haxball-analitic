@@ -1,8 +1,8 @@
 {
   "name": "haxball-render-live-analytics",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "HaxBall Headless + dashboard analytics ao vivo",
+  "description": "Dashboard público de analytics para HaxBall",
   "type": "module",
   "main": "server.js",
   "scripts": {
@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "express": "^5.1.0",
-    "haxball.js": "^5.0.7",
     "ws": "^8.18.3"
   }
 }
