@@ -15,11 +15,9 @@ const TOKEN = process.env.HAXBALL_TOKEN;
 if (!TOKEN) {
   console.error("========================================");
   console.error("ERRO: HAXBALL_TOKEN não foi configurado.");
-  console.error("");
   console.error("Configure HAXBALL_TOKEN nas Environment");
   console.error("Variables do Render.");
   console.error("========================================");
-
   process.exit(1);
 }
 
@@ -35,7 +33,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 /*
 ==================================================
-ESTADO DO ANALYTICS
+ESTADO
 ==================================================
 */
 
@@ -69,7 +67,7 @@ const state = {
 
 /*
 ==================================================
-HTTP SERVER
+HTTP
 ==================================================
 */
 
@@ -99,7 +97,11 @@ function broadcast() {
 
   for (const client of clients) {
     if (client.readyState === WebSocket.OPEN) {
-      client.send(message);
+      try {
+        client.send(message);
+      } catch (error) {
+        console.error("Erro enviando WebSocket:", error);
+      }
     }
   }
 }
@@ -148,7 +150,7 @@ function updateBall(room) {
 
 /*
 ==================================================
-SCORES
+SCORE
 ==================================================
 */
 
@@ -181,25 +183,19 @@ CRIAR SALA
 async function createRoom(HBInit) {
   console.log("");
   console.log("========================================");
-  console.log("Criando sala HaxBall...");
+  console.log("CRIANDO SALA HAXBALL");
   console.log("========================================");
 
   const room = HBInit({
     roomName: "Analytics Test Room",
-
     maxPlayers: 8,
-
     public: true,
-
     noPlayer: true,
-
     token: TOKEN
   });
 
   /*
-  ================================================
-  CONFIGURAÇÃO DA SALA
-  ================================================
+  CONFIGURAÇÃO
   */
 
   room.setDefaultStadium("Big");
@@ -209,14 +205,10 @@ async function createRoom(HBInit) {
   room.setTimeLimit(5);
 
   /*
-  ================================================
-  ESTADO INICIAL
-  ================================================
+  ESTADO
   */
 
   state.connected = true;
-
-  state.roomName = "Analytics Test Room";
 
   state.lastEvent = "Sala HaxBall criada.";
 
@@ -230,14 +222,12 @@ async function createRoom(HBInit) {
 
   console.log("");
   console.log("========================================");
-  console.log("SALA HAXBALL CRIADA!");
+  console.log("SALA HAXBALL CRIADA");
   console.log("========================================");
   console.log("");
 
   /*
-  ================================================
-  LINK DA SALA
-  ================================================
+  LINK
   */
 
   room.onRoomLink = function (url) {
@@ -256,9 +246,7 @@ async function createRoom(HBInit) {
   };
 
   /*
-  ================================================
   PLAYER JOIN
-  ================================================
   */
 
   room.onPlayerJoin = function (player) {
@@ -276,9 +264,7 @@ async function createRoom(HBInit) {
   };
 
   /*
-  ================================================
   PLAYER LEAVE
-  ================================================
   */
 
   room.onPlayerLeave = function (player) {
@@ -296,9 +282,7 @@ async function createRoom(HBInit) {
   };
 
   /*
-  ================================================
   GAME START
-  ================================================
   */
 
   room.onGameStart = function () {
@@ -314,9 +298,7 @@ async function createRoom(HBInit) {
   };
 
   /*
-  ================================================
   GAME STOP
-  ================================================
   */
 
   room.onGameStop = function () {
@@ -332,9 +314,7 @@ async function createRoom(HBInit) {
   };
 
   /*
-  ================================================
   GOAL
-  ================================================
   */
 
   room.onTeamGoal = function (team) {
@@ -352,9 +332,7 @@ async function createRoom(HBInit) {
   };
 
   /*
-  ================================================
-  TEAM VICTORY
-  ================================================
+  VITÓRIA
   */
 
   room.onTeamVictory = function (scores) {
@@ -374,9 +352,7 @@ async function createRoom(HBInit) {
   };
 
   /*
-  ================================================
   GAME TICK
-  ================================================
   */
 
   let lastBroadcast = 0;
@@ -389,9 +365,8 @@ async function createRoom(HBInit) {
     updateBall(room);
 
     /*
-    Não precisamos mandar 60 mensagens por segundo.
-    20 atualizações por segundo já deixam o dashboard
-    praticamente em tempo real.
+    Atualiza o dashboard no máximo
+    20 vezes por segundo.
     */
 
     if (now - lastBroadcast >= 50) {
@@ -404,9 +379,7 @@ async function createRoom(HBInit) {
   };
 
   /*
-  ================================================
-  INITIAL STATE
-  ================================================
+  ESTADO INICIAL
   */
 
   updatePlayers(room);
@@ -431,27 +404,15 @@ wss.on("connection", function (socket) {
 
   clients.add(socket);
 
-  /*
-  Envia imediatamente o estado atual
-  */
-
   if (socket.readyState === WebSocket.OPEN) {
     socket.send(JSON.stringify(state));
   }
-
-  /*
-  Quando o dashboard fecha
-  */
 
   socket.on("close", function () {
     clients.delete(socket);
 
     console.log("Dashboard desconectado.");
   });
-
-  /*
-  Se ocorrer erro
-  */
 
   socket.on("error", function (error) {
     console.error("Erro no WebSocket:", error);
@@ -462,7 +423,7 @@ wss.on("connection", function (socket) {
 
 /*
 ==================================================
-START SERVER
+START
 ==================================================
 */
 
@@ -479,15 +440,47 @@ server.listen(PORT, "0.0.0.0", async function () {
     console.log("Carregando HaxBall...");
 
     /*
-    A versão atual do haxball.js retorna uma Promise
-    que fornece o HBInit.
+    haxball.js atual:
+    
+    HaxballJS() -> Promise
+    Promise -> HBInit
     */
 
+    if (typeof HaxballJS !== "function") {
+      console.error("ERRO: haxball.js não exportou uma função.");
+
+      console.error(
+        "Tipo recebido:",
+        typeof HaxballJS
+      );
+
+      console.error(
+        "Valor recebido:",
+        HaxballJS
+      );
+
+      process.exit(1);
+    }
+
     const HBInit = await HaxballJS();
+
+    if (typeof HBInit !== "function") {
+      console.error(
+        "ERRO: HaxballJS foi carregado, mas não retornou HBInit."
+      );
+
+      console.error(
+        "Tipo de HBInit:",
+        typeof HBInit
+      );
+
+      process.exit(1);
+    }
 
     console.log("HaxBall carregado.");
 
     await createRoom(HBInit);
+
   } catch (error) {
     console.error("");
     console.error("========================================");
@@ -496,10 +489,9 @@ server.listen(PORT, "0.0.0.0", async function () {
 
     console.error(error);
 
-    console.error("");
-    console.error("Stack:");
-
     if (error && error.stack) {
+      console.error("");
+      console.error("STACK:");
       console.error(error.stack);
     }
 
