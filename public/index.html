@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HaxBall Analytics LIVE</title>
+<style>
+body{margin:0;background:#101216;color:#eee;font-family:Arial,sans-serif}
+header{padding:18px 22px;background:#171a20;display:flex;justify-content:space-between;align-items:center}
+h1{margin:0;font-size:22px}.live{color:#62e56b;font-weight:bold}
+main{max-width:1050px;margin:20px auto;padding:0 16px}
+.card{background:#171a20;border:1px solid #2a2e37;border-radius:12px;padding:16px;margin-bottom:16px}
+.score{text-align:center;font-size:42px;font-weight:bold}.teams{font-size:14px;color:#aaa;text-align:center}
+.field{position:relative;max-width:850px;height:400px;margin:18px auto;border:3px solid #ddd;border-radius:8px;background:#237b3b;overflow:hidden}
+.mid{position:absolute;left:50%;top:0;height:100%;border-left:2px solid rgba(255,255,255,.6)}
+.ball{position:absolute;width:14px;height:14px;border-radius:50%;background:white;transform:translate(-50%,-50%);box-shadow:0 0 8px #fff}
+.player{position:absolute;width:24px;height:24px;border-radius:50%;transform:translate(-50%,-50%);border:2px solid white}
+.red{background:#e44}.blue{background:#39f}
+table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid #292d35;text-align:left}
+.small{color:#9ba1ad}.event{margin-top:10px;color:#cfd3da}
+</style>
+</head>
+<body>
+<header><h1>HaxBall Analytics LIVE</h1><div id="status" class="live">● CONECTANDO</div></header>
+<main>
+<div class="card">
+  <div class="teams">RED &nbsp;&nbsp;&nbsp; VS &nbsp;&nbsp;&nbsp; BLUE</div>
+  <div id="score" class="score">0 × 0</div>
+  <div id="time" class="small" style="text-align:center">00:00</div>
+</div>
+<div class="card">
+  <div class="field" id="field"><div class="mid"></div><div id="ball" class="ball"></div></div>
+</div>
+<div class="card">
+  <b>Jogadores</b>
+  <table><thead><tr><th>Nome</th><th>Time</th><th>ID</th></tr></thead>
+  <tbody id="players"></tbody></table>
+  <div id="event" class="event">Aguardando dados...</div>
+</div>
+</main>
+<script>
+const field=document.getElementById("field");
+const ball=document.getElementById("ball");
+function fmt(t){t=Math.max(0,Math.floor(t||0));return String(Math.floor(t/60)).padStart(2,"0")+":"+String(t%60).padStart(2,"0")}
+function pos(x,y){return {left:(x+1500)/3000*100,top:(y+600)/1200*100}}
+function render(s){
+ document.getElementById("status").textContent=s.connected?"● LIVE":"● OFFLINE";
+ document.getElementById("score").textContent=`${s.score.red||0} × ${s.score.blue||0}`;
+ document.getElementById("time").textContent=fmt(s.game.time);
+ document.getElementById("event").textContent=s.lastEvent||"";
+ const p=document.getElementById("players");p.innerHTML="";
+ for(const x of s.players||[]){
+   const tr=document.createElement("tr");
+   tr.innerHTML=`<td>${esc(x.name)}</td><td>${x.team===1?"RED":x.team===2?"BLUE":"SPECTATOR"}</td><td>${x.id}</td>`;
+   p.appendChild(tr);
+ }
+ const bp=pos(s.ball.x,s.ball.y);ball.style.left=bp.left+"%";ball.style.top=bp.top+"%";
+}
+function esc(x){return String(x).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+const proto=location.protocol==="https:"?"wss":"ws";
+const ws=new WebSocket(`${proto}://${location.host}/ws`);
+ws.onopen=()=>document.getElementById("status").textContent="● LIVE";
+ws.onclose=()=>document.getElementById("status").textContent="● OFFLINE";
+ws.onmessage=e=>render(JSON.parse(e.data));
+</script>
+</body>
+</html>
