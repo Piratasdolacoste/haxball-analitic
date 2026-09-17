@@ -2,13 +2,13 @@
   "name": "haxball-render-live-analytics",
   "version": "1.0.0",
   "private": true,
-  "description": "Sala HaxBall Headless + dashboard analytics ao vivo",
+  "description": "HaxBall Headless + dashboard analytics ao vivo",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "engines": {
-    "node": ">=20 <25"
+    "node": ">=22.18"
   },
   "dependencies": {
     "express": "^5.1.0",
