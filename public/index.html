@@ -3,223 +3,284 @@
 
 <head>
 
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-<title>HaxBall Analytics LIVE</title>
+  <title>HaxBall Analytics</title>
 
-<style>
+  <style>
 
-* {
-    box-sizing: border-box;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-body {
-
-    margin: 0;
-
-    background:
-        radial-gradient(
-            circle at top,
-            #202631,
-            #0c0f14 70%
-        );
-
-    color: white;
-
-    font-family:
+    body {
+      margin: 0;
+      background: #0b0f14;
+      color: #ffffff;
+      font-family:
         Arial,
         Helvetica,
         sans-serif;
-}
+    }
 
-header {
+    header {
+      padding: 20px;
+      background: #111820;
+      border-bottom: 1px solid #26313d;
+    }
 
-    height: 70px;
+    header h1 {
+      margin: 0 0 8px 0;
+      font-size: 26px;
+    }
 
-    background: #151922;
+    #connection {
+      font-size: 14px;
+      color: #ff5555;
+    }
 
-    border-bottom:
-        1px solid #2b303b;
+    .online {
+      color: #55ff88 !important;
+    }
 
-    display: flex;
+    .container {
+      max-width: 1300px;
+      margin: auto;
+      padding: 20px;
+    }
 
-    align-items: center;
+    .grid {
+      display: grid;
+      grid-template-columns:
+        repeat(auto-fit, minmax(250px, 1fr));
 
-    justify-content: space-between;
+      gap: 15px;
+    }
 
-    padding: 0 25px;
-}
+    .card {
+      background: #111820;
+      border: 1px solid #26313d;
+      border-radius: 12px;
+      padding: 18px;
+    }
 
-.logo {
+    .card h2 {
+      margin-top: 0;
+      font-size: 16px;
+      color: #aab6c4;
+    }
 
-    font-size: 22px;
+    .score {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      font-size: 44px;
+      font-weight: bold;
+    }
 
-    font-weight: bold;
-}
+    .red {
+      color: #ff5555;
+    }
 
-.live {
+    .blue {
+      color: #5599ff;
+    }
 
-    color: #4cff68;
+    .timer {
+      text-align: center;
+      font-size: 34px;
+      font-weight: bold;
+      margin-top: 12px;
+    }
 
-    font-weight: bold;
-}
+    .status {
+      font-size: 18px;
+      font-weight: bold;
+    }
 
-main {
+    .field-wrapper {
+      margin-top: 20px;
+    }
 
-    width: 100%;
+    #field {
+      position: relative;
+      width: 100%;
+      max-width: 1000px;
+      height: 520px;
+      margin: auto;
 
-    max-width: 1100px;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          #24733e 0px,
+          #24733e 50px,
+          #287d44 50px,
+          #287d44 100px
+        );
 
-    margin: auto;
+      border: 5px solid #ffffff;
+      border-radius: 8px;
 
-    padding: 20px;
-}
+      overflow: hidden;
+    }
 
-.card {
+    .center-line {
+      position: absolute;
 
-    background: #151922;
+      left: 50%;
+      top: 0;
 
-    border:
-        1px solid #2b303b;
+      width: 3px;
+      height: 100%;
 
-    border-radius: 12px;
+      background: rgba(255,255,255,0.8);
 
-    padding: 18px;
+      transform: translateX(-50%);
+    }
 
-    margin-bottom: 18px;
-}
+    .center-circle {
+      position: absolute;
 
-.score {
+      left: 50%;
+      top: 50%;
 
-    display: flex;
+      width: 130px;
+      height: 130px;
 
-    justify-content: center;
+      border: 3px solid rgba(255,255,255,0.8);
 
-    align-items: center;
+      border-radius: 50%;
 
-    gap: 35px;
+      transform:
+        translate(-50%, -50%);
+    }
 
-    font-size: 45px;
+    .ball {
+      position: absolute;
 
-    font-weight: bold;
-}
+      width: 16px;
+      height: 16px;
 
-.team {
+      background: #ffffff;
 
-    text-align: center;
+      border-radius: 50%;
 
-    font-size: 14px;
-
-    color: #9fa6b3;
-}
-
-.time {
-
-    text-align: center;
-
-    color: #aeb4c0;
-
-    margin-top: 5px;
-}
-
-.field {
-
-    position: relative;
-
-    width: 100%;
-
-    height: 430px;
-
-    overflow: hidden;
-
-    border:
-        3px solid white;
-
-    border-radius: 8px;
-
-    background: #24833f;
-}
-
-.center-line {
-
-    position: absolute;
-
-    left: 50%;
-
-    top: 0;
-
-    height: 100%;
-
-    border-left:
-        2px solid
-        rgba(255,255,255,.6);
-}
-
-.ball {
-
-    position: absolute;
-
-    width: 15px;
-
-    height: 15px;
-
-    background: white;
-
-    border-radius: 50%;
-
-    transform:
+      transform:
         translate(-50%, -50%);
 
-    box-shadow:
-        0 0 10px white;
-}
+      box-shadow:
+        0 0 8px rgba(255,255,255,0.9);
+    }
 
-.players {
+    .player-dot {
+      position: absolute;
 
-    width: 100%;
+      width: 24px;
+      height: 24px;
 
-    border-collapse: collapse;
-}
+      border-radius: 50%;
 
-.players th,
-.players td {
+      border: 2px solid #ffffff;
 
-    text-align: left;
+      transform:
+        translate(-50%, -50%);
 
-    padding: 10px;
+      font-size: 9px;
 
-    border-bottom:
-        1px solid #292e38;
-}
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-.players th {
+      font-weight: bold;
+    }
 
-    color: #9fa6b3;
+    .red-player {
+      background: #d83a3a;
+    }
 
-    font-size: 13px;
-}
+    .blue-player {
+      background: #377de8;
+    }
 
-.event {
+    .spec-player {
+      background: #777777;
+    }
 
-    margin-top: 15px;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
-    color: #cfd4dc;
-}
+    th,
+    td {
+      text-align: left;
+      padding: 10px;
 
-.status-box {
+      border-bottom:
+        1px solid #26313d;
+    }
 
-    display: flex;
+    th {
+      color: #9da9b6;
+      font-size: 13px;
+    }
 
-    justify-content: space-between;
+    .event {
+      margin-top: 10px;
 
-    padding: 10px 0;
+      padding: 12px;
 
-    color: #aeb4c0;
-}
+      background: #0c1117;
 
-</style>
+      border-radius: 8px;
+
+      color: #dbe3ec;
+    }
+
+    .room-link {
+      display: inline-block;
+
+      margin-top: 10px;
+
+      padding: 10px 14px;
+
+      border-radius: 7px;
+
+      background: #2875e6;
+
+      color: white;
+
+      text-decoration: none;
+    }
+
+    .room-link:hover {
+      background: #3d86ef;
+    }
+
+    .empty {
+      color: #7f8a96;
+
+      padding: 15px 0;
+    }
+
+    @media (max-width: 700px) {
+
+      #field {
+        height: 300px;
+      }
+
+      .score {
+        font-size: 34px;
+      }
+
+    }
+
+  </style>
 
 </head>
 
@@ -227,341 +288,633 @@ main {
 
 <header>
 
-<div class="logo">
-⚽ HaxBall Analytics
-</div>
+  <h1>⚽ HaxBall Analytics</h1>
 
-<div id="connection" class="live">
-● CONECTANDO
-</div>
+  <div id="connection">
+    ● Desconectado do servidor
+  </div>
 
 </header>
 
+<div class="container">
 
-<main>
+  <div class="grid">
 
+    <div class="card">
 
-<div class="card">
+      <h2>SALA</h2>
 
-<div class="team">
-RED &nbsp; VS &nbsp; BLUE
+      <div
+        id="roomName"
+        class="status"
+      >
+        Aguardando...
+      </div>
+
+      <a
+        id="roomLink"
+        class="room-link"
+        href="#"
+        target="_blank"
+        style="display:none"
+      >
+        Entrar na sala
+      </a>
+
+    </div>
+
+    <div class="card">
+
+      <h2>PLACAR</h2>
+
+      <div class="score">
+
+        <span
+          id="redScore"
+          class="red"
+        >
+          0
+        </span>
+
+        <span>
+          ×
+        </span>
+
+        <span
+          id="blueScore"
+          class="blue"
+        >
+          0
+        </span>
+
+      </div>
+
+      <div
+        id="timer"
+        class="timer"
+      >
+        00:00
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <h2>PARTIDA</h2>
+
+      <div
+        id="gameState"
+        class="status"
+      >
+        Aguardando
+      </div>
+
+      <div class="event">
+
+        Último evento:
+
+        <strong id="lastEvent">
+          Aguardando Headless...
+        </strong>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <h2>JOGADORES</h2>
+
+      <div
+        id="playerCount"
+        class="status"
+      >
+        0 jogadores
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card field-wrapper">
+
+    <h2>CAMPO AO VIVO</h2>
+
+    <div id="field">
+
+      <div class="center-line"></div>
+
+      <div class="center-circle"></div>
+
+      <div
+        id="ball"
+        class="ball"
+      ></div>
+
+      <div id="playersVisual"></div>
+
+    </div>
+
+  </div>
+
+  <div class="card" style="margin-top:20px">
+
+    <h2>JOGADORES NA SALA</h2>
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>ID</th>
+
+          <th>Nome</th>
+
+          <th>Time</th>
+
+          <th>Admin</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody id="playersTable">
+
+        <tr>
+          <td colspan="4" class="empty">
+            Nenhum jogador conectado.
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
 </div>
-
-<div id="score" class="score">
-0 × 0
-</div>
-
-<div id="time" class="time">
-00:00
-</div>
-
-</div>
-
-
-<div class="card">
-
-<div
-    id="field"
-    class="field"
->
-
-<div class="center-line"></div>
-
-<div
-    id="ball"
-    class="ball"
-></div>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h3>
-👥 Jogadores
-</h3>
-
-<table class="players">
-
-<thead>
-
-<tr>
-
-<th>
-Nome
-</th>
-
-<th>
-Time
-</th>
-
-<th>
-ID
-</th>
-
-</tr>
-
-</thead>
-
-<tbody id="players">
-
-</tbody>
-
-</table>
-
-<div
-    id="event"
-    class="event"
->
-Aguardando dados...
-</div>
-
-</div>
-
-
-<div class="card">
-
-<div class="status-box">
-
-<span>
-Status da partida
-</span>
-
-<strong id="gameState">
-AGUARDANDO
-</strong>
-
-</div>
-
-<div class="status-box">
-
-<span>
-Jogadores
-</span>
-
-<strong id="playerCount">
-0
-</strong>
-
-</div>
-
-</div>
-
-
-</main>
-
 
 <script>
 
-const connection =
+  /*
+  ==================================================
+  CONFIGURAÇÃO
+  ==================================================
+  */
+
+  const connectionElement =
     document.getElementById("connection");
 
-const score =
-    document.getElementById("score");
+  const roomNameElement =
+    document.getElementById("roomName");
 
-const time =
-    document.getElementById("time");
+  const roomLinkElement =
+    document.getElementById("roomLink");
 
-const players =
-    document.getElementById("players");
+  const redScoreElement =
+    document.getElementById("redScore");
 
-const eventText =
-    document.getElementById("event");
+  const blueScoreElement =
+    document.getElementById("blueScore");
 
-const gameState =
+  const timerElement =
+    document.getElementById("timer");
+
+  const gameStateElement =
     document.getElementById("gameState");
 
-const playerCount =
+  const lastEventElement =
+    document.getElementById("lastEvent");
+
+  const playerCountElement =
     document.getElementById("playerCount");
 
-const ball =
+  const playersTable =
+    document.getElementById("playersTable");
+
+  const field =
+    document.getElementById("field");
+
+  const ball =
     document.getElementById("ball");
 
+  const playersVisual =
+    document.getElementById("playersVisual");
 
-function formatTime(seconds) {
+  /*
+  ==================================================
+  CONVERTER TEMPO
+  ==================================================
+  */
+
+  function formatTime(seconds) {
 
     seconds =
-        Math.max(
-            0,
-            Math.floor(seconds || 0)
-        );
+      Math.max(
+        0,
+        Math.floor(Number(seconds) || 0)
+      );
 
     const minutes =
-        Math.floor(seconds / 60);
+      Math.floor(seconds / 60);
 
     const secs =
-        seconds % 60;
+      seconds % 60;
 
     return (
-        String(minutes).padStart(2, "0")
-        +
-        ":"
-        +
-        String(secs).padStart(2, "0")
+      String(minutes).padStart(2, "0") +
+      ":" +
+      String(secs).padStart(2, "0")
     );
-}
+  }
 
+  /*
+  ==================================================
+  ATUALIZAR CAMPO
+  ==================================================
+  */
 
-function escapeHTML(text) {
-
-    return String(text)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-}
-
-
-function updateBall(x, y) {
+  function updateField(data) {
 
     /*
-      Conversão aproximada das coordenadas
-      do estádio Big para a tela.
+    Coordenadas aproximadas do Big Stadium.
     */
 
-    const left =
-        ((x + 1500) / 3000) * 100;
+    const FIELD_WIDTH = 2000;
+    const FIELD_HEIGHT = 1000;
 
-    const top =
-        ((y + 600) / 1200) * 100;
+    const width =
+      field.clientWidth;
 
-    ball.style.left =
-        Math.max(0, Math.min(100, left))
-        + "%";
+    const height =
+      field.clientHeight;
 
-    ball.style.top =
-        Math.max(0, Math.min(100, top))
-        + "%";
-}
+    /*
+    BALL
+    */
 
+    if (data.ball) {
 
-function render(data) {
+      let x =
+        ((Number(data.ball.x) + 1000)
+        / FIELD_WIDTH) * width;
 
-    connection.textContent =
-        data.connected
-            ? "● LIVE"
-            : "● OFFLINE";
+      let y =
+        ((Number(data.ball.y) + 500)
+        / FIELD_HEIGHT) * height;
 
-    score.textContent =
-        `${data.score.red || 0} × ${data.score.blue || 0}`;
+      x =
+        Math.max(
+          0,
+          Math.min(width, x)
+        );
 
-    time.textContent =
-        formatTime(data.game.time);
+      y =
+        Math.max(
+          0,
+          Math.min(height, y)
+        );
 
-    gameState.textContent =
-        data.game.state === "playing"
-            ? "JOGANDO"
-            : "AGUARDANDO";
+      ball.style.left =
+        x + "px";
 
-    playerCount.textContent =
-        data.players.length;
-
-    eventText.textContent =
-        data.lastEvent || "";
-
-    players.innerHTML = "";
-
-    for (const player of data.players) {
-
-        const row =
-            document.createElement("tr");
-
-        let team = "SPECTATOR";
-
-        if (player.team === 1) {
-            team = "RED";
-        }
-
-        if (player.team === 2) {
-            team = "BLUE";
-        }
-
-        row.innerHTML = `
-            <td>
-                ${escapeHTML(player.name)}
-            </td>
-
-            <td>
-                ${team}
-            </td>
-
-            <td>
-                ${player.id}
-            </td>
-        `;
-
-        players.appendChild(row);
+      ball.style.top =
+        y + "px";
     }
 
-    updateBall(
-        data.ball.x,
-        data.ball.y
+    /*
+    PLAYERS
+    */
+
+    playersVisual.innerHTML = "";
+
+    /*
+    O estado atual contém apenas informações
+    de jogador. A posição individual dos jogadores
+    será adicionada na próxima versão do host.
+    */
+
+  }
+
+  /*
+  ==================================================
+  ATUALIZAR TABELA
+  ==================================================
+  */
+
+  function updatePlayers(players) {
+
+    if (!Array.isArray(players)) {
+      players = [];
+    }
+
+    playerCountElement.textContent =
+      players.length +
+      (
+        players.length === 1
+          ? " jogador"
+          : " jogadores"
+      );
+
+    if (players.length === 0) {
+
+      playersTable.innerHTML = `
+        <tr>
+          <td
+            colspan="4"
+            class="empty"
+          >
+            Nenhum jogador conectado.
+          </td>
+        </tr>
+      `;
+
+      return;
+    }
+
+    playersTable.innerHTML =
+      players
+        .map(function(player) {
+
+          let team =
+            "Spectator";
+
+          let teamClass = "";
+
+          if (player.team === 1) {
+            team = "RED";
+            teamClass = "red";
+          }
+
+          if (player.team === 2) {
+            team = "BLUE";
+            teamClass = "blue";
+          }
+
+          return `
+            <tr>
+
+              <td>
+                ${player.id ?? "-"}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  player.name ?? "?"
+                )}
+              </td>
+
+              <td class="${teamClass}">
+                ${team}
+              </td>
+
+              <td>
+                ${player.admin ? "✓" : ""}
+              </td>
+
+            </tr>
+          `;
+
+        })
+        .join("");
+  }
+
+  /*
+  ==================================================
+  ESCAPE HTML
+  ==================================================
+  */
+
+  function escapeHtml(value) {
+
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+  }
+
+  /*
+  ==================================================
+  RECEBER ESTADO
+  ==================================================
+  */
+
+  function updateDashboard(data) {
+
+    if (!data) {
+      return;
+    }
+
+    /*
+    CONEXÃO
+    */
+
+    if (data.connected) {
+
+      connectionElement.textContent =
+        "● Headless conectado";
+
+      connectionElement.classList.add(
+        "online"
+      );
+
+    } else {
+
+      connectionElement.textContent =
+        "● Headless desconectado";
+
+      connectionElement.classList.remove(
+        "online"
+      );
+    }
+
+    /*
+    SALA
+    */
+
+    roomNameElement.textContent =
+      data.roomName ||
+      "Analytics Test Room";
+
+    if (data.roomLink) {
+
+      roomLinkElement.href =
+        data.roomLink;
+
+      roomLinkElement.style.display =
+        "inline-block";
+
+    } else {
+
+      roomLinkElement.style.display =
+        "none";
+    }
+
+    /*
+    SCORE
+    */
+
+    const score =
+      data.score || {};
+
+    redScoreElement.textContent =
+      score.red ?? 0;
+
+    blueScoreElement.textContent =
+      score.blue ?? 0;
+
+    timerElement.textContent =
+      formatTime(score.time);
+
+    /*
+    GAME
+    */
+
+    if (
+      data.game &&
+      data.game.state === "playing"
+    ) {
+
+      gameStateElement.textContent =
+        "🟢 Em andamento";
+
+    } else {
+
+      gameStateElement.textContent =
+        "⚪ Aguardando";
+    }
+
+    /*
+    EVENT
+    */
+
+    lastEventElement.textContent =
+      data.lastEvent ||
+      "Nenhum evento.";
+
+    /*
+    PLAYERS
+    */
+
+    updatePlayers(
+      data.players || []
     );
-}
 
+    /*
+    FIELD
+    */
 
-const protocol =
-    location.protocol === "https:"
+    updateField(data);
+  }
+
+  /*
+  ==================================================
+  WEBSOCKET
+  ==================================================
+  */
+
+  let socket = null;
+
+  let reconnectDelay = 1000;
+
+  function connect() {
+
+    const protocol =
+      location.protocol === "https:"
         ? "wss:"
         : "ws:";
 
+    const url =
+      protocol +
+      "//" +
+      location.host +
+      "/ws";
 
-const websocket =
-    new WebSocket(
-        `${protocol}//${location.host}/ws`
+    console.log(
+      "Conectando:",
+      url
     );
 
+    socket =
+      new WebSocket(url);
 
-websocket.onopen =
-    function () {
+    socket.onopen = function() {
 
-        connection.textContent =
-            "● LIVE";
+      console.log(
+        "Dashboard conectado."
+      );
 
-    };
-
-
-websocket.onclose =
-    function () {
-
-        connection.textContent =
-            "● OFFLINE";
+      reconnectDelay = 1000;
 
     };
 
+    socket.onmessage = function(event) {
 
-websocket.onerror =
-    function () {
+      try {
 
-        connection.textContent =
-            "● ERRO";
+        const data =
+          JSON.parse(event.data);
+
+        updateDashboard(data);
+
+      } catch (error) {
+
+        console.error(
+          "JSON inválido:",
+          error
+        );
+
+      }
+
+    };
+
+    socket.onclose = function() {
+
+      console.log(
+        "Dashboard desconectado."
+      );
+
+      connectionElement.textContent =
+        "● Reconectando...";
+
+      connectionElement.classList.remove(
+        "online"
+      );
+
+      setTimeout(
+        connect,
+        reconnectDelay
+      );
+
+      reconnectDelay =
+        Math.min(
+          reconnectDelay * 2,
+          10000
+        );
 
     };
 
+    socket.onerror = function(error) {
 
-websocket.onmessage =
-    function (event) {
-
-        try {
-
-            const data =
-                JSON.parse(event.data);
-
-            render(data);
-
-        } catch (error) {
-
-            console.error(
-                "Erro nos dados:",
-                error
-            );
-
-        }
+      console.error(
+        "WebSocket error:",
+        error
+      );
 
     };
+  }
+
+  /*
+  ==================================================
+  START
+  ==================================================
+  */
+
+  connect();
 
 </script>
 
