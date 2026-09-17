@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "express": "^5.1.0",
-    "haxball.js": "^2.3.2",
+    "haxball.js": "^5.0.7",
     "ws": "^8.18.3"
   }
 }
